@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!-- <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -6,20 +6,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chit-chat</title>
 </head>
-<body>
+<body> -->
     <!-- /*
     1 при отправке формы сообщение появляется в чате
     2 это сообщение отсылается на беккендб веб соккет серверу
     3 при получении с бекенда сообщения от веб-сокет сервера 
     его в чат с классом "user-chat message"
 */ -->
-<div>
+<!-- <div>
     <form action="" id="user-name-form">
         <label for="">Welcome to chat</label>
         <input type="text" name="userName" placeholder="Your name" required>
     </form>
 </div>
-<div id="chat" class="chat">
+<div id="chat" class="chat"> -->
     
     <!-- <p><span class="name">Bogdan:</span>
         <span class="you-chat-message">Hallo there</span>
@@ -28,7 +28,7 @@
         <span class="user-chat-message">Hallo-Hallo</span>
     </p> -->
 
-</div>
+<!-- </div>
 <div id="chat-message">
     <form action="" id="chat-form">
         <div class="form-group"> 
@@ -46,18 +46,18 @@ ws.onmessage = ({data})=> {
    chat.insertAdjacentHTML("beforeend", `<p><span class="name">${name}:</span>
         <span class="user-chat-message">${message}</span>
     </p>` );
-}
+} -->
 
 
-       const userNameForm = document.getElementById("user-name-form");
+       <!-- const userNameForm = document.getElementById("user-name-form");
         userNameForm.addEventListener("submit", function(e){
             e.preventDefault();
             userName = this.elements.userName.value;
             this.remove();
 
-        })
+        }) -->
 
-        const chatForm = document.getElementById("chat-form");
+        <!-- const chatForm = document.getElementById("chat-form");
         chatForm.addEventListener("submit", function(e){
             e.preventDefault();
             const message = this.elements.message.value;
@@ -75,5 +75,54 @@ ws.onmessage = ({data})=> {
      
     </script>
     
+</body>
+</html>   -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Chat</h1>
+    <div id="chat"></div>
+    <input id="msg" type="text" name="" >
+    <style>
+        input {border: 1px solid blue;}
+    </style>
+    <script>
+        const CHAT_RETURN = 13;
+
+        const socket = new WebSocket("ws://localhost:8080");
+        const chat = document.getElementById("chat");
+        const msg = document.getElementById("msg");
+        msg.focus();
+        const writeLine = (text) => {
+            const line = document.createElement("div");
+            line.innerHTML = (`<p>${text}</p>`);
+            chat.appendChild(line);
+        }
+
+        socket.addEventListener("open", ()=>{
+writeLine("connected");
+        })
+        socket.addEventListener("close", ()=> {
+            writeLine("closed");
+        })
+        socket.addEventListener("message", ({data})=> {
+            writeLine(data);
+        })
+        msg.addEventListener("keydown", (e)=> {
+if(e.keyCode === CHAT_RETURN) {
+    const s = msg.value;
+    msg.value = "";
+    writeLine(s);
+    socket.send(s);
+}
+        })
+    </script>
 </body>
 </html>
